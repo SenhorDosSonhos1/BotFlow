@@ -1,11 +1,12 @@
 from fastapi import APIRouter, HTTPException,Depends
 
-from app.schemas.user import UserCreate, UserResponse, UserUpdate
+from app.schemas.user import UserCreate, UserResponse, UserUpdate, UserLogin
 from app.models.user import User
 
 from sqlalchemy.orm import Session
 from app.database import get_db
 
+from app.security.password import get_password_hash, verify_password
 
 router = APIRouter(
     prefix='/users', #Coloca a rota padrão(pai) pra todas as rotas
@@ -15,7 +16,15 @@ router = APIRouter(
 
 @router.post('/', status_code=201, response_model=UserResponse)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
-    user = User(username = user.username, email = user.email, password_hash = user.password)
+
+    if db.query(User).filter_by(username = user.username, email = user.email).first():
+        raise HTTPException(
+            status_code=404,
+            detail='Nome de usuario ou email já existe no sistema.'
+        )
+
+    password_hash = get_password_hash(user.password)
+    user = User(username = user.username, email = user.email, password_hash = password_hash)
     db.add(user)
     db.commit()
     db.refresh(user)
@@ -32,7 +41,6 @@ def update_user(user_id: int, update_data: UserUpdate, db: Session = Depends(get
     if user is not None:
         user.username = update_data.username
         user.email = update_data.email
-        user.password_hash = update_data.password
         
         db.commit()
         db.refresh(user)
@@ -68,3 +76,24 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
         status_code=404,
         detail='Usuario não encontrado'
     ) 
+
+@router.post('/auth', response_model=UserResponse)
+def user_login(user: UserLogin, db: Session = Depends(get_db)):
+    user_db = db.query(User).filter_by(email = user.email).first()
+
+    if user_db is None:
+        raise HTTPException(
+            status_code=401,
+            detail = 'As credenciais estão invalidas ou não existem'
+        )
+    
+    is_valid = verify_password(user.password, user_db.password_hash)
+
+    if not is_valid:
+        raise HTTPException(
+            status_code=401,
+            detail = 'As credenciais estão invalidas ou não existem'
+        )
+    return user_db
+
+    
