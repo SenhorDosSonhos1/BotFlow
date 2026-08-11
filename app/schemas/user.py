@@ -1,10 +1,17 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, ConfigDict
 
-class UserSchema(BaseModel):
-    id: int
+class UserBase(BaseModel):
     username: str = Field(min_length=3, max_length=30)
     email: EmailStr
-    age: int = Field(ge=18)
 
-class UserDB(UserSchema):
+class UserCreate(UserBase):
     password: str
+
+class UserUpdate(UserBase):
+    pass
+
+class UserResponse(UserBase):
+    id: int
+
+    model_config = ConfigDict(from_attributes=True)
+    
