@@ -40,6 +40,7 @@ Status atual
 - Refatoração e melhorias na arquitetura
 📋 Próximas etapas
 - Relacionamentos entre entidades
+- Products
 - Orders
 - Payments
 - Integração com Telegram
