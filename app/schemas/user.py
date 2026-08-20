@@ -10,12 +10,8 @@ class UserCreate(UserBase):
 class UserUpdate(UserBase):
     pass
 
-class UserLogin(BaseModel):
-    email: EmailStr
-    password: str
-
 class UserResponse(UserBase):
     id: int
 
     model_config = ConfigDict(from_attributes=True)
-    
+
