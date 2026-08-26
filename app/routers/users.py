@@ -20,7 +20,7 @@ router = APIRouter(
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     if db.query(User).filter_by(email = user.email).first():
         raise HTTPException(
-            status_code=404,
+            status_code=409,
             detail='Nome de usuario ou email já existe no sistema.'
         )
 

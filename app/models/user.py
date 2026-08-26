@@ -1,6 +1,6 @@
-from app.database import Base, engine
+from app.database import Base
 from sqlalchemy import Column, Integer, String, DateTime
-
+from datetime import datetime
 
 class User(Base):
     __tablename__ = "users"
@@ -9,7 +9,7 @@ class User(Base):
     username = Column(String)
     email = Column(String)
     password_hash = Column(String)
-    created_at = Column(DateTime)
+    created_at = Column(DateTime, default=datetime.utcnow)
 
     def __str__(self):
         return f'User {self.username}'

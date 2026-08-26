@@ -1,5 +1,7 @@
+/tests
 /docs.txt
 /doc.md
+/.env.test
 ## Python
 
 # Byte-compiled / optimized / DLL files

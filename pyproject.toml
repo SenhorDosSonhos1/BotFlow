@@ -26,7 +26,8 @@ build-backend = "poetry.core.masonry.api"
 dev = [
     "ruff (>=0.16.1,<0.17.0)",
     "pytest (>=9.1.1,<10.0.0)",
-    "taskipy (>=1.14.1,<2.0.0)"
+    "taskipy (>=1.14.1,<2.0.0)",
+    "httpx (>=0.28.1,<0.29.0)"
 ]
 
 [tool.ruff]
