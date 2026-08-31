@@ -11,6 +11,6 @@ class Product(Base):
     price = Column(DECIMAL)
     active = Column(Boolean)
     created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, onupdate=datetime.now, default=datetime.utcnow)
 
 

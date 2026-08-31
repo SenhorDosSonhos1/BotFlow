@@ -4,8 +4,10 @@ from alembic import context
 
 from app.database import Base, DATABASE_URL
 from sqlalchemy import create_engine
-from app.models.user import User
 
+from app.models.user import User
+from app.models.product import Product
+from app.models.order import Order
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
